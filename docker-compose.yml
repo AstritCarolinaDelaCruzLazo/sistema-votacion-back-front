@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: fullstack_postgres
+    environment:
+      POSTGRES_DB: myproject_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - fullstack_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend Django
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fullstack_backend
+    environment:
+      SECRET_KEY: django-insecure-dev-key-change-in-production
+      DEBUG: "True"
+      DB_NAME: myproject_db
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DJANGO_SUPERUSER_PASSWORD: admin123
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fullstack_network
+    restart: unless-stopped
+
+  # Frontend React
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fullstack_frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:8000/api
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - fullstack_network
+    restart: unless-stopped
+
+  # Redis para caché (opcional)
+  redis:
+    image: redis:7-alpine
+    container_name: fullstack_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - fullstack_network
+    restart: unless-stopped
+
+# Volúmenes persistentes
+volumes:
+  postgres_data:
+    driver: local
+  static_volume:
+    driver: local
+  redis_data:
+    driver: local
+
+# Red personalizada
+networks:
+  fullstack_network:
+    driver: bridge

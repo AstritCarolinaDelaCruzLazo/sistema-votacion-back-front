@@ -1,0 +1,86 @@
+/* styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    background: #F4F4F4;
+    color: #1E1E1E;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Estilos para componentes personalizados */
+  .btn {
+    @apply px-4 py-2 rounded font-medium transition-colors duration-200;
+  }
+  
+  .btn-dark {
+    @apply bg-gray-800 text-white hover:bg-gray-900;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+  }
+  
+  .btn-success {
+    @apply bg-green-600 text-white hover:bg-green-700;
+  }
+  
+  .btn-outline-secondary {
+    @apply bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-100;
+  }
+  
+  .form-control {
+    @apply w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden;
+  }
+  
+  .alert {
+    @apply px-3 py-2 rounded text-sm;
+  }
+  
+  .alert-danger {
+    @apply bg-red-100 text-red-700 border border-red-300;
+  }
+  /* Paleta tipo maqueta */
+:root{
+  --sidebar-bg:#e8ebef;     /* gris claro lateral */
+  --sidebar-fg:#5b6472;     /* texto ítems */
+  --sidebar-fg-hover:#2b313a;
+  --surface:#ffffff;        /* fondo tarjetas/cont */
+  --app-bg:#ffffff;         /* fondo general */
+  --card-border:#e3e6ea;
+  --logo-band:#f2f3f5;      /* franja gris de logo en tarjetas */
+}
+
+  /* Sidebar suave */
+  .sidebar-soft{
+    background:var(--sidebar-bg);
+    color:var(--sidebar-fg);
+  }
+  .sidebar-soft .btn-link,
+  .sidebar-soft .btn-link span,
+  .sidebar-soft a{ color:var(--sidebar-fg); }
+  .sidebar-soft .btn-link:hover,
+  .sidebar-soft a:hover{ color:var(--sidebar-fg-hover); }
+
+  /* Contenido y tarjetas */
+  .app-surface{ background:var(--app-bg); }
+  .card{ border-color:var(--card-border); }
+  .card .logo-area{ background:var(--logo-band); }
+
+  /* Gráficos de reportes*/
+  .chart-card .card-body{ padding: 0.75rem; }
+  .chart-wrap{ position: relative; width: 100%; height: 280px; } /* ajusta 240–320 */
+
+
+}

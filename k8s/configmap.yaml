@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fullstack-config
+  namespace: fullstack-app
+data:
+  DB_NAME: "myproject_db"
+  DB_USER: "postgres"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DEBUG: "False"
+  REACT_APP_API_URL: "http://api.fullstack.local/api"
